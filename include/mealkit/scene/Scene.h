@@ -1,6 +1,6 @@
 #pragma once
 
-#include "aster/core/Math.h"
+#include "mealkit/core/Math.h"
 
 #include <string>
 #include <vector>
@@ -8,7 +8,7 @@
 // 씬: 에디터에서 배치하고 게임이 불러 쓰는 물체 목록과 환경 설정.
 // 파일은 사람이 읽을 수 있는 텍스트(.scene)다. 실수는 %.9g로 저장해 읽고 쓸 때 비트 단위로 보존된다.
 // 멀티플레이에서는 모든 피어가 같은 씬 파일을 써야 하므로 contentHash()로 접속 시 검사한다.
-namespace aster::scene {
+namespace mealkit::scene {
 
 enum class EntityKind : u8 {
     Solid,      // 보이고 충돌하는 상자
@@ -59,4 +59,4 @@ bool load(Scene& scene, const std::string& path, std::string* error = nullptr);
 // 기본 아레나: 바닥, 벽, 경사로, 기둥, 스폰 지점 4개. 회전은 삼각함수 없이 상수로 넣어 어느 PC에서나 같다.
 Scene makeDefault();
 
-} // namespace aster::scene
+} // namespace mealkit::scene

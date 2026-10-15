@@ -1,7 +1,7 @@
-#include "aster/scene/Scene.h"
+#include "mealkit/scene/Scene.h"
 
-#include "aster/core/Hash.h"
-#include "aster/core/Log.h"
+#include "mealkit/core/Hash.h"
+#include "mealkit/core/Log.h"
 
 #include <algorithm>
 #include <cstdio>
@@ -9,7 +9,7 @@
 #include <cstring>
 #include <windows.h>
 
-namespace aster::scene {
+namespace mealkit::scene {
 namespace {
 
 constexpr u32 rgba(u8 r, u8 g, u8 b, u8 a = 255) {
@@ -105,11 +105,11 @@ u64 Scene::contentHash() const {
 bool save(const Scene& scene, const std::string& path) {
     FILE* f = openFile(path, L"wb");
     if (!f) {
-        ASTER_ERROR("Cannot write scene: %s", path.c_str());
+        MEALKIT_ERROR("Cannot write scene: %s", path.c_str());
         return false;
     }
     const Environment& env = scene.environment;
-    fprintf(f, "# Aster scene\nversion 1\n\n");
+    fprintf(f, "# MealKit scene\nversion 1\n\n");
     writeVec3(f, "sun", env.sunDirection);
     writeVec3(f, "sunColor", env.sunColor);
     writeVec3(f, "sky", env.skyColor);
@@ -179,7 +179,7 @@ bool load(Scene& out, const std::string& path, std::string* error) {
             else if (std::strcmp(key, "color") == 0) e.color = static_cast<u32>(std::strtoul(rest, nullptr, 16));
             else if (std::strcmp(key, "flags") == 0) e.flags = static_cast<u32>(std::strtoul(rest, nullptr, 10));
             else if (std::strcmp(key, "model") == 0) e.model = rest;
-            else ASTER_WARN("%s:%d: unknown entity key '%s' ignored", path.c_str(), lineNo, key);
+            else MEALKIT_WARN("%s:%d: unknown entity key '%s' ignored", path.c_str(), lineNo, key);
         } else {
             Environment& env = scene.environment;
             if (std::strcmp(key, "sun") == 0) ok = readVec3(rest, env.sunDirection);
@@ -191,7 +191,7 @@ bool load(Scene& out, const std::string& path, std::string* error) {
                 ok = readFloats(rest, v, 4);
                 env.fogColor = {v[0], v[1], v[2]};
                 env.fogDensity = v[3];
-            } else ASTER_WARN("%s:%d: unknown key '%s' ignored", path.c_str(), lineNo, key);
+            } else MEALKIT_WARN("%s:%d: unknown key '%s' ignored", path.c_str(), lineNo, key);
         }
         if (!ok) {
             snprintf(message, sizeof(message), "line %d: invalid '%s'", lineNo, key);
@@ -250,4 +250,4 @@ Scene makeDefault() {
     return s;
 }
 
-} // namespace aster::scene
+} // namespace mealkit::scene
