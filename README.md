@@ -1,4 +1,4 @@
-# MealKit-Scene
+# module-scene
 
 > **Beta.** MealKit is in beta: interfaces may still change between minor versions.
 
