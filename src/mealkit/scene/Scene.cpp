@@ -10,7 +10,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <mutex>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace mealkit::scene {
 namespace {
@@ -455,6 +457,18 @@ bool save(const Scene& scene, const std::string& path) {
     return ok;
 }
 
+void warnObject(const Entity& e, const std::string& warnings) {
+    static std::mutex lock;
+    static std::unordered_set<std::string> seen;
+    const std::string where = e.source.empty() ? std::string("scene") : e.source;
+    const std::string key = where + "|" + std::to_string(e.id) + "|" + warnings;
+    {
+        std::lock_guard<std::mutex> guard(lock);
+        if (!seen.insert(key).second) return;
+    }
+    MEALKIT_WARN("%s: object '%s' (id %u, kind %s): %s", where.c_str(), e.name.c_str(), e.id, e.type.c_str(), warnings.c_str());
+}
+
 namespace {
 
 void writeEntities(FILE* f, const std::vector<Entity>& entities) {
@@ -509,6 +523,7 @@ bool loadText(Scene& out, const std::string& path, const text::Format& format, s
         } else if (std::strcmp(key, "entity") == 0) {
             ok = !inEntity;
             e = Entity{};
+            e.source = path + ":" + std::to_string(lineNo);
             inEntity = true;
         } else if (std::strcmp(key, "end") == 0) {
             ok = inEntity;
