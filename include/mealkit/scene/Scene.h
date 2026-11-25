@@ -84,7 +84,7 @@ MEALKIT_STRUCT(TilemapFields) {
     MEALKIT_FIELD(i32, height, 9, "Grid height (cells)");
     MEALKIT_FIELD(f32, cellSize, 1.0f, "Cell size (m)");
     MEALKIT_FIELD(std::string, solid, {}, "Solid tiles (sheet cell numbers, e.g. 3 5 8-11)");
-    MEALKIT_FIELD(std::string, cells, {}, "Cells (tile numbers row by row from the top, . = empty)");
+    MEALKIT_FIELD(std::string, cells, {}, "Cells (tile numbers row by row from the top, . for empty)");
     MEALKIT_VIEW_FIELD(i32, layer, 0, "Layer (higher draws over lower)");
     MEALKIT_VIEW_FIELD(bool, pixelArt, true, "Pixel art (nearest texel, no filtering)");
 };
